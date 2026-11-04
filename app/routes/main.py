@@ -1,10 +1,10 @@
 """演示路由（JSON）：路径参数、查询参数的用法示例。"""
 
-from flask import Blueprint, request
+from flask import request
 
 from app.utils.responses import fail, ok
 from .blueprint import main_bp
-# main_bp = Blueprint("main", __name__)
+from app.forms.book import SearchForm
 
 
 @main_bp.route("/")
@@ -28,11 +28,13 @@ def about(name):
     return ok(data={"name": name})
 
 
-@main_bp.route("/search")
-@main_bp.route("/search/<keyword>")
-def search(keyword=None):
+@main_bp.route("/book/search")
+@main_bp.route("/book/search/<keyword>")
+def search():
     """查询参数示例：/search?q=关键词 或 /search/关键词，参数缺失返回 400。"""
-    kw = keyword or request.args.get("q", "")
-    if not kw:
-        return fail(message="缺少搜索关键词：请用 /search?q=xxx 或 /search/xxx", code=400)
-    return ok(data={"keyword": kw})
+    # kw = request.args.get("q", "")
+    form = SearchForm(request.args)
+    if form.validate():
+        print(f"{form.keywords.data}")
+        return ok(data={"keyword": form.keywords.data, "page": form.page.data})
+    return fail(message=form.errors, code=400)
