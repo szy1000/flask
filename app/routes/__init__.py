@@ -9,5 +9,6 @@ from .blueprint import main_bp
 # 路由才会挂到蓝图上。不导入的话蓝图是空的，所有请求都会 404。
 from app.routes import main  # noqa: E402
 from app.routes import api  # noqa: E402
+from app.routes import actual_data  # noqa: E402
 
 __all__ = ["main_bp"]

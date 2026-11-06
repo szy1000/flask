@@ -5,7 +5,6 @@
 """
 
 from flask import Flask
-
 from config import Config
 
 
@@ -18,9 +17,18 @@ def create_app(config_class=Config):
     # 让 jsonify 返回中文时不转义成 \uXXXX
     app.json.ensure_ascii = False
 
+    from app.models.book import db
+    from app.models.actual_data import ActualData
+    db.init_app(app)
+    with app.app_context():
+        db.create_all()
 
+    # print(app.config["SQLALCHEMY_DATABASE_URI"])
     # 注册路由蓝图
     register_blueprints(app)
+
+
+
 
     return app
 

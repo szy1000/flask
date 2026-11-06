@@ -15,3 +15,4 @@ class Config:
     """默认配置（开发环境够用）。"""
 
     SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret-key-请改成随机字符串")
+    SQLALCHEMY_DATABASE_URI = os.getenv("SQLALCHEMY_DATABASE_URI")
